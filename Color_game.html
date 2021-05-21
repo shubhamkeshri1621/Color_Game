@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Color Game</title>
+	<style type="text/css">
+		body{
+			background-color: #232323;
+			margin: 0;
+			font-family: "Avenir"; 
+		}
+		.square{
+			width:30%;
+			padding-bottom: 30%;
+			margin: 1.66%;
+			float: left;
+			border-radius: 15%;
+			transition: background 0.6s;
+			-webkit-transition: background 0.6s; /*for webkit engine*/
+			-moz-transition : background 0.6s; /*for mozilla browser*/
+		}
+		#container{
+			margin: 20px auto;
+			max-width: 700px;
+			text-align: center;
+		}
+
+		div{
+			color: white;
+		}
+
+		#message{
+			color: black;
+			display: inline-block;
+			width: 30%;
+			font-size: inherit;
+		}
+
+		h1{
+			text-align:center;
+			color: white;
+			background: steelblue;
+			font-weight: normal;
+			font-height:1.1;
+			padding: 20px 0; 
+			margin: 0;
+		}
+
+		#strip{
+			background: white;
+			text-align: center;
+			height: 30px;
+			margin:0;
+		}
+
+		.selected{
+			background: skyblue;
+		}
+
+		#RGB_values{
+			font-size: 200%;
+			text-transform: uppercase;
+		}
+
+		button{
+			border:none;
+			background: none;
+			height: 100%;
+			text-transform: uppercase;
+			font-weight: 700;
+			color: steelblue;
+			letter-spacing: 1px;
+			font-size: inherit;
+			transition: all 0.3s;
+			outline: none;
+		}
+
+		button:hover {
+			color: white;
+			background: steelblue;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>THE GREAT <br>
+	<span id="RGB_values">RGB <!-- (<span id="Red_id">0</span>,<span id="Green_id">0</span>,<span id="Blue_id">0</span>) --></span>
+	 <br>THE GUESSING GAME </h1>
+	 <div id="strip"><button id="New_game">New Colors</button>
+	 	<span id="message"></span>
+	 	<button id="easy">Easy</button>
+	 	<button id="med">Medium</button>
+	 	<button id="hard" class="selected">Hard</button>
+	 </div>
+<div id="container">
+	<div class="square"></div>
+	<div class="square"></div>
+	<div class="square"></div>
+	<div class="square"></div>
+	<div class="square"></div>
+	<div class="square"></div>
+	<div class="square"></div>
+	<div class="square"></div>
+	<div class="square"></div>
+</div>
+<script type="text/javascript">
+
+var Mode = 9;
+function RightAnswer(color,num){
+	var sqr = document.querySelectorAll(".square");
+	for(var i=0;i<num;i++){
+		sqr[i].style.backgroundColor = color;
+	}
+	for(var i=num;i<9;i++){
+		setColor(sqr[i]);
+	}
+}
+
+function setColor(num){num.style.backgroundColor = "#232323";}
+
+function preSet(){
+	var message = document.querySelector("#message");
+	message.textContent = "";
+	var new_butt = document.querySelector("#New_game");
+	new_butt.textContent = "New Colors";
+	var col = document.querySelector("h1");
+	col.style.backgroundColor = "steelblue";
+}
+
+function chooseColors(num){
+	var squares = document.querySelectorAll(".square");
+	for(var i = 0; i<num; i++){
+		var red = Math.floor(Math.random()*256);
+		var green = Math.floor(Math.random()*256);
+		var blue = Math.floor(Math.random()*256);
+	squares[i].style.backgroundColor = "rgb("+red+", "+green+", "+blue+")";
+
+	squares[i].addEventListener("click",function(){
+			var rgb_value = document.querySelector("#RGB_values");
+			if(rgb_value.textContent !== this.style.backgroundColor)
+			{
+				var mess = document.querySelector("#message");
+				mess.textContent = "Please Try Again :( ";
+				setColor(this);
+			}
+			else
+			{
+				var mess = document.querySelector("#message");
+				mess.textContent = "Huraaaaah ! You are Correct.";
+				var res=document.querySelector("body");
+				RightAnswer(this.style.backgroundColor,num);
+				var col = document.querySelector("h1");
+				col.style.backgroundColor = this.style.backgroundColor;
+				var new_butt = document.querySelector("#New_game");
+				new_butt.textContent = "Play Again ?";
+			}
+		});
+	}
+	var index = Math.floor(Math.random()*num);
+	var rgb_val = document.querySelector("#RGB_values");
+	rgb_val.textContent = squares[index].style.backgroundColor;
+}
+
+var new_butt = document.querySelector("#New_game");
+new_butt.textContent = "New Colors";
+var squares = document.querySelectorAll(".square");
+preSet();
+chooseColors(Mode);
+
+var New = document.querySelector("#New_game");
+New.addEventListener("click",function(){
+	preSet();
+	chooseColors(Mode);
+});
+
+function AddSel(num){
+	easy_lvl.classList.remove("selected");
+	med_lvl.classList.remove("selected");
+	hard_lvl.classList.remove("selected");
+	num.classList.add("selected");
+}
+
+var easy_lvl = document.querySelector("#easy");
+var med_lvl = document.querySelector("#med");
+var hard_lvl = document.querySelector("#hard");
+easy_lvl.addEventListener("click",function(){
+	AddSel(this);
+	preSet();
+	Mode=3;
+	chooseColors(Mode);
+	var sqr = document.querySelectorAll(".square");
+	for(var i=3; i<9;i++){setColor(sqr[i]);}
+});
+
+
+med_lvl.addEventListener("click",function(){
+	AddSel(this);
+	preSet();
+	Mode=6;
+	chooseColors(Mode);
+	var sqr = document.querySelectorAll(".square");
+	for(var i=6; i<9;i++){setColor(sqr[i]);}
+});
+
+hard_lvl.addEventListener("click",function(){
+	AddSel(this);
+	preSet();
+	Mode=9;
+	chooseColors(Mode);
+});	
+	
+
+</script>
+</body>
+</html>
